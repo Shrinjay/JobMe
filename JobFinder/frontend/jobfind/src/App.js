@@ -19,8 +19,8 @@ class App extends React.Component{
       wage: null, 
       location: null,
       submitted: null,
-      applicants: [],
-      JobID: sessionStorage.getItem('jobID')
+ 
+     
      
     }
     this.getJobs = this.getJobs.bind(this)
@@ -68,17 +68,7 @@ class App extends React.Component{
     
   }
 
-  async getApplicants(jobid){
-    console.log(jobid)
-    if (jobid!=null){
-      sessionStorage.setItem('jobID', jobid)
-    let response = await axios.get('/api/applications/', {params: {
-      "jobID": jobid
-    }})
-    if (response.data!=null)
-    {this.setState({applicants: response.data, jobID: jobid})}
-  }
-  }
+ 
 
   renderJobs() {
     
@@ -89,7 +79,7 @@ class App extends React.Component{
 
   componentDidMount() {
     this.getJobs()
-    this.getApplicants(this.state.jobID)
+   
   }
 
   handleChange(event){
@@ -154,14 +144,6 @@ class App extends React.Component{
           </ModalBody>
           <ModalFooter><Button color="success" onClick={this.sendApplication.bind(this, this.state.id)}>Submit Application</Button></ModalFooter>
         </Modal>
-
-       {this.state.applicants!=null && <Modal isOpen={this.state.applicants!=null}>
-          <ModalHeader>Applicants:</ModalHeader>
-          <ModalBody>
-            
-          </ModalBody>
-          <ModalFooter><Button onClick={this.setState({applicants: null})}>Close</Button> </ModalFooter>
-        </Modal>
 }
         <Table>
           <thead>
@@ -172,13 +154,6 @@ class App extends React.Component{
           {this.renderJobs()}
         </Table>
       </Container>
-        </Route>
-        <Route exact path='/applicants'>
-        {this.state.applicants!=null && <Table>
-              <thead><th>Name</th><th>Skills</th><th>Wage</th><th>Location</th></thead>
-              {this.state.applicants.map(applicant => <tr><td>{applicant.applicant_name}</td>
-              <td>{applicant.applicant_skills}</td><td>{applicant.applicant_wage}</td><td>{applicant.location}</td></tr>)}
-            </Table>}
         </Route>
         </Switch>
       </BrowserRouter>
